@@ -3,7 +3,7 @@ class FriendsController < ApplicationController
 
   # GET /friends
   def index
-    @friends = Friend.all
+    @friends = User.all
 
     render json: @friends
   end
