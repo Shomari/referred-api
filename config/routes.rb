@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   resources :friends
   resources :referrals
 
-  post '/callback', to: 'facebook#auth'
-  get '/token', to: 'facebook#token'
+  get '/buid/:id', to: 'business#show_by_buid'
+  post '/login', to: 'users#login'
+
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

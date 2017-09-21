@@ -3,9 +3,11 @@ class FriendsController < ApplicationController
 
   # GET /friends
   def index
-    @friends = User.all
-
-    render json: @friends
+    return head 400 unless active_token?
+    user = User.where(facebook_uid: @fb_user_id)
+    friends = user.all_friends
+    #should send an email here: if friend email isn't in database
+    render json: friends
   end
 
   # GET /friends/1
@@ -15,13 +17,10 @@ class FriendsController < ApplicationController
 
   # POST /friends
   def create
-    @friend = Friend.new(friend_params)
-
-    if @friend.save
-      render json: @friend, status: :created, location: @friend
-    else
-      render json: @friend.errors, status: :unprocessable_entity
-    end
+    friend = User.find_by email: params[:friend_email]
+    user = User.find_by facebook_uid: params[:facebook_uid]
+    Friendship.create!(user: user, friend: friend)
+    head :ok
   end
 
   # PATCH/PUT /friends/1
@@ -39,6 +38,12 @@ class FriendsController < ApplicationController
   end
 
   private
+
+    def active_token?
+      token = params['token']
+      @fb_user_id = HTTParty.get("https://graph.facebook.com/me?fields=id&access_token=#{token}")
+      @fb_user_id.code == 200 ? true : false
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_friend
       @friend = Friend.find(params[:id])
