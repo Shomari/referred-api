@@ -11,4 +11,7 @@
 
 # Friendship.create(user: sho, friend: amanda)
 
-Business.create(name: 'shos plumbing', address: '123 main st')
+cat = Category.create(name: 'Auto Repair')
+Category.create(name: 'Plumber')
+Category.create(name: 'Dentist')
+Business.create(name: 'shos plumbing', address: '123 main st', category: cat)

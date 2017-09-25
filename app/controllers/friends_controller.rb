@@ -4,7 +4,7 @@ class FriendsController < ApplicationController
   # GET /friends
   def index
     return head 400 unless active_token?
-    user = User.where(facebook_uid: @fb_user_id)
+    user = User.find_by(facebook_uid: @fb_user_id)
     friends = user.all_friends
     #should send an email here: if friend email isn't in database
     render json: friends
@@ -41,8 +41,9 @@ class FriendsController < ApplicationController
 
     def active_token?
       token = params['token']
-      @fb_user_id = HTTParty.get("https://graph.facebook.com/me?fields=id&access_token=#{token}")
-      @fb_user_id.code == 200 ? true : false
+      fb_response = HTTParty.get("https://graph.facebook.com/me?fields=id&access_token=#{token}")
+      @fb_user_id = fb_response['id'].to_i
+      fb_response.code == 200 ? true : false
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_friend

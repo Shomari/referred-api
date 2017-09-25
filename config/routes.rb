@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :friends
-  resources :referrals
+  resources :recommendations
+  resources :categories, only: [:index]
 
   get '/buid/:id', to: 'business#show_by_buid'
   post '/login', to: 'users#login'
