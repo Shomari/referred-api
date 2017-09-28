@@ -15,3 +15,9 @@ cat = Category.create(name: 'Auto Repair')
 Category.create(name: 'Plumber')
 Category.create(name: 'Dentist')
 Business.create(name: 'shos plumbing', address: '123 main st', category: cat)
+
+User.create(name: 'Amanda', email: 'amdna@mail', facebook_uid: 435)
+User.create(name: 'Jane', email: 'amdna@mail', facebook_uid: 435)
+
+# Friendship.create(user_id: 1, friend_id: 2)
+Recommendation.create(user_id: 2, business_id: 1, text: 'amandas plumbing revie')

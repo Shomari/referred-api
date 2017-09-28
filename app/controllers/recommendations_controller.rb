@@ -1,9 +1,18 @@
 class RecommendationsController < ApplicationController
 
+  def index
+    user = User.find params[:uid]
+    friends = user.all_friends
+    recommendations = friends.map { |friend| friend.recommendations_for_category(params[:cid].to_i) }
+    recommendations = recommendations.flatten.map(&:skeleton_biz_data)
+    render json: recommendations
+  end
+
   #GET /recommendations/:id
   def show
-    @recommendations = Recommendation.where(user_id: params[:id])
-    render json: @recommendations
+    recommendations = Recommendation.where(user_id: params[:id])
+    recommendations = recommendations.map(&:skeleton_biz_data)
+    render json: recommendations
   rescue
     head 400
   end
