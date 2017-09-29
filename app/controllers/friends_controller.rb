@@ -10,6 +10,15 @@ class FriendsController < ApplicationController
     render json: friends
   end
 
+  #GET /searchFriends
+  def search_for_friends
+    if params[:friendName]
+      render json: User.where(name: params[:friendName]).select(:id, :name, :image_location)
+    else
+      render json: User.where(email: params[:email]).select(:id, :name, :image_location)
+    end
+  end
+
   # GET /friends/1
   def show
     render json: @friend

@@ -2,9 +2,13 @@ Rails.application.routes.draw do
   resources :friends
   resources :recommendations
   resources :categories, only: [:index]
+  resources :business
+
+  get '/searchFriends', to: 'friends#search_for_friends'
 
   get '/buid/:id', to: 'business#show_by_buid'
   post '/login', to: 'users#login'
+
 
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
