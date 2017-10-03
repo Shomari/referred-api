@@ -29,6 +29,7 @@ class FriendsController < ApplicationController
     friend = User.find_by email: params[:friend_email]
     user = User.find_by facebook_uid: params[:facebook_uid]
     Friendship.create!(user: user, friend: friend)
+    # MAILER: User added friend,  Friend gets email saying user added him
     head :ok
   end
 

@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925165812) do
+ActiveRecord::Schema.define(version: 20171003030015) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "businesses", force: :cascade do |t|
     t.string "name"
@@ -36,8 +39,8 @@ ActiveRecord::Schema.define(version: 20170925165812) do
   end
 
   create_table "recommendations", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "business_id"
+    t.bigint "user_id"
+    t.bigint "business_id"
     t.text "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -45,13 +48,37 @@ ActiveRecord::Schema.define(version: 20170925165812) do
     t.index ["user_id"], name: "index_recommendations_on_user_id"
   end
 
+  create_table "referrals", force: :cascade do |t|
+    t.integer "business_id"
+    t.integer "referrer_id"
+    t.integer "referred_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.integer "facebook_uid", limit: 8
+    t.bigint "facebook_uid"
     t.string "image_location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+
+  create_view "referral_payloads",  sql_definition: <<-SQL
+      SELECT referrals.referrer_id,
+      referrals.referred_id,
+      referrer.name AS referrer_name,
+      referrer.image_location AS referrer_image,
+      referred.name AS referred_name,
+      referred.image_location AS referred_location,
+      businesses.name AS business_name,
+      businesses.zipcode AS business_zipcode
+     FROM (((referrals
+       JOIN users referrer ON ((referrals.referrer_id = referrer.id)))
+       JOIN users referred ON ((referrals.referred_id = referred.id)))
+       JOIN businesses ON ((referrals.business_id = businesses.id)));
+  SQL
 
 end

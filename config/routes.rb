@@ -3,6 +3,10 @@ Rails.application.routes.draw do
   resources :recommendations
   resources :categories, only: [:index]
   resources :business
+  resources :referrals
+
+  get '/referrers/:id', to: 'referrals#referrers'
+  get '/referreds/:id', to: 'referrals#referreds'
 
   get '/searchFriends', to: 'friends#search_for_friends'
 

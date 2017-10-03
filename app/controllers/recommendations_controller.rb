@@ -24,14 +24,12 @@ class RecommendationsController < ApplicationController
   end
 
   def destroy
-    binding.pry
     recommendation = Recommendation.find params[:id]
     return head 400 unless recommendation.destroy!
     head 200
   end
 
   def delete
-    binding.pry
   end
 
   private
