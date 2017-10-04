@@ -3,11 +3,13 @@ class FriendsController < ApplicationController
 
   # GET /friends
   def index
-    return head 400 unless active_token?
+    return head 401 unless active_token?
     user = User.find_by(facebook_uid: @fb_user_id)
     friends = user.all_friends
     #should send an email here: if friend email isn't in database
     render json: friends
+  rescue ActiveRecord::RecordNotFound
+    head 422
   end
 
   #GET /searchFriends
@@ -19,11 +21,6 @@ class FriendsController < ApplicationController
     end
   end
 
-  # GET /friends/1
-  def show
-    render json: @friend
-  end
-
   # POST /friends
   def create
     friend = User.find_by email: params[:friend_email]
@@ -31,20 +28,8 @@ class FriendsController < ApplicationController
     Friendship.create!(user: user, friend: friend)
     # MAILER: User added friend,  Friend gets email saying user added him
     head :ok
-  end
-
-  # PATCH/PUT /friends/1
-  def update
-    if @friend.update(friend_params)
-      render json: @friend
-    else
-      render json: @friend.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /friends/1
-  def destroy
-    @friend.destroy
+  rescue ActiveRecord::RecordNotFound
+    head 422
   end
 
   private
@@ -55,13 +40,5 @@ class FriendsController < ApplicationController
       @fb_user_id = fb_response['id'].to_i
       fb_response.code == 200 ? true : false
     end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_friend
-      @friend = Friend.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def friend_params
-      params.require(:friend).permit(:name)
-    end
 end
