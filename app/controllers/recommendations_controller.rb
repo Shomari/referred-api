@@ -1,5 +1,6 @@
 class RecommendationsController < ApplicationController
 
+  #GET /recommendations
   def index
     user = User.find params[:uid]
     friends = user.all_friends
@@ -17,19 +18,18 @@ class RecommendationsController < ApplicationController
     head 400
   end
 
+  #POST /recommendations
   def create
     recommendation = Recommendation.new(business_params)
     return head 400 unless recommendation.save!
     head 200
   end
 
+  #DELETE /recommendations/:id
   def destroy
     recommendation = Recommendation.find params[:id]
     return head 400 unless recommendation.destroy!
     head 200
-  end
-
-  def delete
   end
 
   private
@@ -38,5 +38,4 @@ class RecommendationsController < ApplicationController
     user = User.find params[:uid]
     {business_id: params[:business][:id], user: user, text: params[:text]}
   end
-
 end

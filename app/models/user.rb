@@ -12,7 +12,7 @@ class User < ApplicationRecord
   end
 
   def recommendations_for_category(category_id)
-    recommendations.select { |r| r.get_category == category_id }
+    recommendations.select { |rec| rec.get_category == category_id }
   end
 
 end

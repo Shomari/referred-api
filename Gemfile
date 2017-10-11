@@ -31,13 +31,11 @@ gem 'scenic'
 gem 'rack-cors'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.6'
   gem 'pry-rails'
   gem 'factory_girl_rails'
   gem 'faker', :git => 'git://github.com/stympy/faker.git', :branch => 'master'
-
+  gem "rubocop-rails"
 end
 
 
