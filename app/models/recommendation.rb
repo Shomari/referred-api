@@ -13,13 +13,7 @@ class Recommendation < ApplicationRecord
 
   # Is this makign a query for every call?  If so then fix
   def skeleton_biz_data
-    payload = self.as_json
-    payload["business_name"] = self.business.name
-    payload["business_zip"] = self.business.zipcode
-    payload["user_name"] = self.user.name
-    payload["user_image"] = self.user.image_location
-    payload["category"] = self.business.category.name
-    payload
+    #TODO: User view for payload data
   end
 
 
