@@ -4,6 +4,7 @@ class CreateRecommendations < ActiveRecord::Migration[5.1]
       t.belongs_to :user
       t.belongs_to :business
       t.text :text
+      t.text :status
 
       t.timestamps
     end

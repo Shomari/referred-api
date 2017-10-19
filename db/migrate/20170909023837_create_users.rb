@@ -5,6 +5,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :email
       t.integer :facebook_uid, limit: 8
       t.string :image_location
+      t.string :phone
 
 
       t.timestamps

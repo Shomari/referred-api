@@ -1,5 +1,11 @@
 class ReferralsController < ApplicationController
 
+  def show
+    referrals = BusinessReferralPayload.where(business_id: params[:id])
+    puts referrals
+    render json: referrals
+  end
+
   #POST /recommendation
   def create
     recommendation = Recommendation.find params[:recommendation_id]

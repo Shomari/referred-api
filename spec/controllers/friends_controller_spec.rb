@@ -22,7 +22,5 @@ RSpec.describe FriendsController do
       friendship = Friendship.where(user: user, friend: friend).first
       expect(friendship).not_to be_nil
     end
-
   end
-
 end

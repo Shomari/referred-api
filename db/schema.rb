@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003030015) do
+ActiveRecord::Schema.define(version: 20171017182533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20171003030015) do
     t.text "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "status"
     t.index ["business_id"], name: "index_recommendations_on_business_id"
     t.index ["user_id"], name: "index_recommendations_on_user_id"
   end
@@ -63,6 +64,7 @@ ActiveRecord::Schema.define(version: 20171003030015) do
     t.string "image_location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "phone"
   end
 
 
@@ -75,6 +77,35 @@ ActiveRecord::Schema.define(version: 20171003030015) do
       referred.image_location AS referred_location,
       businesses.name AS business_name,
       businesses.zipcode AS business_zipcode
+     FROM (((referrals
+       JOIN users referrer ON ((referrals.referrer_id = referrer.id)))
+       JOIN users referred ON ((referrals.referred_id = referred.id)))
+       JOIN businesses ON ((referrals.business_id = businesses.id)));
+  SQL
+
+  create_view "recommendation_payloads",  sql_definition: <<-SQL
+      SELECT users.name AS user_name,
+      users.image_location AS user_image,
+      recommendations.text,
+      recommendations.updated_at,
+      recommendations.status,
+      businesses.id AS business_id
+     FROM ((recommendations
+       JOIN users ON ((recommendations.user_id = users.id)))
+       JOIN businesses ON ((recommendations.business_id = businesses.id)));
+  SQL
+
+  create_view "business_referral_payloads",  sql_definition: <<-SQL
+      SELECT referrals.referrer_id,
+      referrals.referred_id,
+      referrer.name AS referrer_name,
+      referrer.image_location AS referrer_image,
+      referrer.email AS referrer_email,
+      referred.name AS referred_name,
+      referred.image_location AS referred_location,
+      referred.email AS referred_email,
+      referred.phone AS referred_phone,
+      businesses.id AS business_id
      FROM (((referrals
        JOIN users referrer ON ((referrals.referrer_id = referrer.id)))
        JOIN users referred ON ((referrals.referred_id = referred.id)))

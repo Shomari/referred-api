@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :business
   resources :referrals
 
+  get '/biz_recommendations/:id', to: 'business_recommendations#index'
+  get '/act_recommendations/:id', to: 'business_recommendations#active_index'
   get '/referrers/:id', to: 'referrals#referrers'
   get '/referreds/:id', to: 'referrals#referreds'
 
